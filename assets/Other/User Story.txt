@@ -1,0 +1,1 @@
+As a gamer a would like to find games I would enjoy playing by description, genre on recommendations based on games I already like. And the application should provide me the best deals for those games.
