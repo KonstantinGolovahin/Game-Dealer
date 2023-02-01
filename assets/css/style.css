@@ -1,0 +1,32 @@
+.input-section {
+    /* width: 300px; */
+    background-color: whitesmoke;
+    padding: 10px;
+}
+
+.output-section {
+    /* width: 70vw; */
+    background-color: bisque;
+}
+
+.col {
+    height: 100vh;
+
+}
+
+#form-input {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+}
+
+#list-games {
+    margin: 0 auto;
+}
+
+.game-img {
+    background-color: royalblue;
+    margin: 5px;
+    width: 150px;
+    height: 150px;
+}
