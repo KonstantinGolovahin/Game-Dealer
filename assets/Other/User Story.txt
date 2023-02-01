@@ -1,1 +1,17 @@
 As a gamer a would like to find games I would enjoy playing by description, genre on recommendations based on games I already like. And the application should provide me the best deals for those games.
+
+ genre, platform for PC - selection (recommended >50%) passing list of names pass to Cheapshark
+
+User enters genre
+
+User enters platform (default one = PC)
+
+ApI call returmes a list of games (up to 10)
+
+when user clicks on a game title this will be passed to CheapShark API to generate a list of deals and games details are being populated somewhere
+
+List of deals will be displayed to a user as a table 
+
+
+
+
