@@ -2,15 +2,17 @@ As a gamer a would like to find games I would enjoy playing by description, genr
 
  genre, platform for PC - selection (recommended >50%) passing list of names pass to Cheapshark
 
-User enters genre
+User enters game title
 
-User enters platform (default one = PC)
+app generates a list of buttons with results of a query
 
-ApI call returmes a list of games (up to 10)
+user presses a button of a list of games provided
 
-when user clicks on a game title this will be passed to CheapShark API to generate a list of deals and games details are being populated somewhere (1 more call)
+App generates 1) game description
+		2) list of deals for this game
+		3) adds 1 record to history
 
-List of deals will be displayed to a user as a table 
+ 
 
 
 

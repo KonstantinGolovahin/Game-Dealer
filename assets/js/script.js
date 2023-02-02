@@ -1,34 +1,40 @@
-
-
-
 // search string
 let searchText
 // query for RAWG API call (1 stage) - exact search PC only, 10 units max
-//let apiRAWGURL = "https://api.rawg.io/api/games?key="+keyRAWG +"&search="+ searchText +"&search_exact=1&exclude_additions=1,platforms=4&page_size=10&page=1&ordering=-rating"
+
 // game name to be used for CheapShark API
 let resultGame = ""
-
 
 // query build for searching for a game
 let queryRawgURL = "https://api.rawg.io/api/games?search_exact=1&exclude_additions=1,platforms=4&page_size=10&page=1&ordering=-rating&"
 let queryRawgParams = { "key": keyRAWG };
 queryRawgParams.search
 
+// query to get game details requires ID (can be stored to history)
 
+let gameID;
+let queryRawgDetails;
+//let queryRawgDetails = "https://api.rawg.io/api/games/" + gameID + "?"
+queryRawgDetailsParams = { "key": keyRAWG };
 
 // lists all deals for the specific input (10 deals, but still returns more)
 // let apiCheapSharkURL= "https://www.cheapshark.com/api/1.0/deals?title="+resultGame +"&limit=10"
 
-let queryCheapSharkURL = "https://www.cheapshark.com/api/1.0/deals?limit=10&"
+let queryCheapSharkURL = "https://www.cheapshark.com/api/1.0/deals?limit=10&exact=1&"
 let queryCheapSharkURLParams = { "title": resultGame }
 
+
+// get list of stores for deals
+let storeListURL = "https://www.cheapshark.com/api/1.0/stores"
+let storesArray = []
+
+let dealURL = "https://www.cheapshark.com/redirect?dealID="
 
 
 
 // new array for values from a local storage
 let taskSaved = [];
 taskSaved = getTasks(taskSaved);
-
 
 
 // retrieve saved values from local storage if any exists
@@ -46,7 +52,7 @@ function getTasks(arr) {
 function renderButtons() {
 
   // clear prevoius entries
-  $("#history").empty()
+  $("#games-list").empty()
   getTasks(taskSaved)
 
   if (taskSaved.length > 0) {
@@ -68,131 +74,114 @@ function renderButtons() {
 }
 
 
+function requestGame() {
+
+  // API call
+  $.ajax({
+    url: queryRawgURL + $.param(queryRawgParams),
+    method: "GET"
+  }).then(function (responseRAWG) {
+
+    // console.log(responseRAWG)
 
 
+    for (i = 0; i < responseRAWG.results.length; i++) {
+
+      // add elements to HTML + add classes from CSS
+      let gameTitle = responseRAWG.results[i].name;
+      let gameID = responseRAWG.results[i].id;
+
+      // dynamically create a set of buttons for ul (buttons only + data attribute as ID for getting game details)
+      let buttonContainer;
+      buttonContainer = $("#games-list");
+
+      // Title
+      let buttonTitle = $("<button>");
+      $(buttonTitle).text(gameTitle);
+      // Adds data and classes
+      $(buttonTitle).attr({ "data-gameid": gameID, class: "btn btn-secondary btn-block mb-1 p-2" });
+      //Adds new button to ul
+      $(buttonContainer).append(buttonTitle);
+
+    }
+
+    // adds click functionality to buttons to call cheapshark 
+
+    $("#games-list").on("click", function (e) {
 
 
+      // get game name for Cheap Shark
+      queryCheapSharkURLParams.title = $(e.target).text();
 
+      $.ajax({
+        url: queryCheapSharkURL + $.param(queryCheapSharkURLParams),
+        method: "GET"
+      }).then(function (responseCheapShark) {
 
-/*  $.ajax({
-   url: apiCheapSharkURL,
-   method: "GET"
- }).then(function(responseCheapShark) {
- 
-   console.log(responseCheapShark)
+        console.log(responseCheapShark)
 
- 
-    for(i=0;i<responseCheapShark.length;i++) {
-       console.log(responseCheapShark[i].title)
-       console.log(responseCheapShark[i].salePrice)
-       console.log(responseCheapShark[i].normalPrice)
-       console.log(responseCheapShark[i].isOnSale) // this should be converted to Sale/ no Sale or something similar
-       console.log(responseCheapShark[i].dealID)
-       console.log(responseCheapShark[i].storeID)  // need a list of stores???
+        for (i = 0; i < responseCheapShark.length; i++) {
+          //  console.log(responseCheapShark[i].title)
+          let gameRPrice = responseCheapShark[i].normalPrice;
+          let gameSPrice = responseCheapShark[i].salePrice;
+          let gameDealID = responseCheapShark[i].dealID;
+          let gamePlatformID = responseCheapShark[i].storeID;
+          let gamePlatformName;
 
-       //needs to be sorted asc by price
-   } 
+          // get store name from a previously received array
+          for (j = 0; j < storesArray.length; j++) {
+            if (gamePlatformID === storesArray[j].storeID) {
+              gamePlatformName = storesArray[j].storeName
+            }
 
-   
-
- 
- 
- }); 
-*/
-
-function requestGame(){
-
-    // API call
-    $.ajax({
-      url: queryRawgURL + $.param(queryRawgParams),
-      method: "GET"
-    }).then(function (responseRAWG) {
-
-      console.log(responseRAWG)
-
-
-      for (i = 0; i < responseRAWG.results.length; i++) {
-        console.log(responseRAWG.results[i].name)
-        console.log(responseRAWG.results[i].background_image)
-        console.log(responseRAWG.results[i].rating)
-        // add elements to HTML + add classes from CSS
-        let gameTitle = responseRAWG.results[i].name;
-        let gameImgURL = responseRAWG.results[i].background_image;
-        let gameRating = responseRAWG.results[i].rating;
-
-        // dynamically create a set of cards for a list of array elements
-        let cardContainer;
-        cardContainer = $("#list-games");
-
-        //card itself
-        let card = $("<div>");
-        $(card).attr("class", "card card-forecast");
-        // card body
-        let cardBody = $("<div>");
-        $(cardBody).attr("class", "card-body");
-
-        // Title
-        let taskTitle = $("<button>");
-        $(taskTitle).text(gameTitle);
-        $(taskTitle).attr("class", "taskTitle");
-        // Image
-        let taskImg = $("<img>");
-        let taskURL = gameImgURL;
-        $(taskImg).attr({ src: taskURL, alt: gameTitle, class: "taskIMG" });
-
-        // Rating
-        let taskRating = $("<p>");
-        $(taskRating).text("Rating: " + gameRating);
-        //$(taskRating).attr("class", "taskText");
-
-        // set card body element order
-        $(cardBody).append(taskTitle);
-        $(cardBody).append(taskImg);
-        $(cardBody).append(taskRating);
-
-        // set a card body inside a card
-        $(card).append(cardBody);
-        $(cardContainer).append(card);
-
-      }
-
-      // adds click functionality to buttons to call cheapshark if there is a button (could be image). Some games might not appear 
-
-      $(".taskTitle").on("click", function (e) {
-
-
-        queryCheapSharkURLParams.title = $(e.target).text();
-        
-        $.ajax({
-          url: queryCheapSharkURL + $.param(queryCheapSharkURLParams),
-          method: "GET"
-        }).then(function (responseCheapShark) {
-
-          console.log(responseCheapShark)
-
-          for (i = 0; i < responseCheapShark.length; i++) {
-            console.log(responseCheapShark[i].title)
-            console.log(responseCheapShark[i].salePrice)
-            console.log(responseCheapShark[i].normalPrice)
-            console.log(responseCheapShark[i].isOnSale) // this should be converted to Sale/ no Sale or something similar
-            console.log(responseCheapShark[i].dealID)
-            console.log(responseCheapShark[i].storeID)  // need a list of stores???
-
-            //needs to be sorted asc by price
           }
 
-
-        });
-
-
-      })
+          //discount value as % from 100%
+          let gameDiscount = 100 - (Math.round(gameSPrice / gameRPrice * 100))
 
 
-    });
+          let markup = "<tr><td>" + gamePlatformName + " </td><td>" + gameRPrice + "</td><td>" + gameSPrice + "</td><td>" + gameDiscount + "</td><td><a href=" + dealURL + gameDealID + ">Buy</a></td></tr>";
+          $(".deal-table tbody").append(markup);
+
+        }
+
+
+      });
+
+
+      // second call to get game details using RAWG single game details
+
+      // need a game ID
+      gameID = $(e.target).attr('data-gameid');
+      queryRawgDetails = "https://api.rawg.io/api/games/" + gameID + "?"
+
+      $.ajax({
+        url: queryRawgDetails + $.param(queryRawgDetailsParams),
+        method: "GET"
+      }).then(function (responseRawgDetails) {
+
+
+        // get elements
+        let gameTitle = responseRawgDetails.name;
+        let gameDescription = responseRawgDetails.description_raw;
+        let gamebackgroundURL = responseRawgDetails.background_image;
+        let gameRating = responseRawgDetails.rating;
+        // display elements
+        $(".game-title").text(gameTitle)
+        $(".game-description").text(gameDescription)
+        $(".game-rating").text("Rating: " + gameRating)
+        $("#game-output").find("img").attr({ src: gamebackgroundURL, alt: gameTitle });
+        //  console.log(responseRawgDetails)
+
+      });
+
+    })
+
+  });
 
 }
 
-
+// get a list of games based on user input
 $("#search-button").on('click', function (e) {
   e.preventDefault();
 
@@ -212,7 +201,7 @@ $("#search-button").on('click', function (e) {
 
 
 
-    // get updated list of tasks from storage 
+    // get updated list of games from storage 
     taskObject = getTasks(taskSaved);
 
     // object tot save to a local storage
@@ -236,6 +225,37 @@ $("#search-button").on('click', function (e) {
   }
 
 });
+
+
+
+
+// get a list of stores before searching for games
+function getStores() {
+  $.ajax({
+    url: storeListURL,
+    method: "GET"
+  }).then(function (responseStores) {
+
+    for (i = 0; i < responseStores.length; i++) {
+
+      let storeObject = {
+        storeID: responseStores[i].storeID,
+        storeName: responseStores[i].storeName
+
+
+      }
+      // update list of stores
+      storesArray.push(storeObject)
+
+    }
+
+
+  });
+}
+
+
+getStores()
+
 
 
 
