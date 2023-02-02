@@ -12,38 +12,48 @@
 </head>
 
 <body>
-    <div class="header">
-        <h1>Game deals</h1>
-    </div>
-    <hr>
     <div class="container-fluid">
         <div class="row">
+            <!-- INPUT -->
             <div class="col input-section">
-                <form id="form-input">
-                    <label for="title-input">Game to search:</label>
-                    <input type="text" name="game-title" id="title-input">
-                    <button type="button">Search</button>
-                </form>
+                <div class="header-title">
+                    <h1 class="title">GAME_DEALER</h1>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <form id="form-input">
+                            <label for="title-input">Search for a game:</label>
+                            <div class="input-wrap">
+                                <input type="text" name="game-title" id="title-input" class="form-control">
+                                <button type="button" class="btn btn-secondary src-btn">Search</button>
 
-                <!-- List of games from Api Result -->
-                <!-- Will be diplayed using jQuery -->
-                <div id="list-games">
-                    <div class="game-img">
-                        <img src="" alt="">
+                            </div>
+                        </form>
+
+                        <!-- List of games from Api Result -->
+                        <!-- Will be diplayed using jQuery -->
+                        <div id="games-list">
+                            <p>Games matching your criteria:</p>
+                            <div class="d-flex flex-column gap-2 col-8 mx-auto">
+                                <button type="button" class="btn btn-secondary game-rec">The current button</button>
+                                <button type="button" class="btn btn-secondary game-rec">A second button item</button>
+                                <button type="button" class="btn btn-secondary game-rec">A third button item</button>
+                                <button type="button" class="btn btn-secondary game-rec">A fourth button item</button>
+                                <button type="button" class="btn btn-secondary game-rec">A disabled button item</button>
+                              </div>
+                        </div>
+
                     </div>
-                    <div class="game-img">
-                        <img src="" alt="">
-                    </div>
-                    <div class="game-img">
-                        <img src="" alt="">
-                    </div>
+
                 </div>
             </div>
 
+            <!-- OUTPUT -->
+          
             <!-- Will be diplayed using jQuery -->
             <div class="col-lg-8 output-section">
                 <!-- Description of selected game -->
-                <div id="game-description">
+                <div id="game-output">
                     <h2>Lorem ipsum</h2>
                     <img src="" alt="">
                     <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatem repudiandae voluptate iste
@@ -69,7 +79,7 @@
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div> 
 
         </div>
     </div>
