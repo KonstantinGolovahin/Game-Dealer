@@ -8,7 +8,7 @@ User enters platform (default one = PC)
 
 ApI call returmes a list of games (up to 10)
 
-when user clicks on a game title this will be passed to CheapShark API to generate a list of deals and games details are being populated somewhere
+when user clicks on a game title this will be passed to CheapShark API to generate a list of deals and games details are being populated somewhere (1 more call)
 
 List of deals will be displayed to a user as a table 
 
