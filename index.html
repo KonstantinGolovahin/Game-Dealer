@@ -19,7 +19,7 @@
                 <div class="header-title">
                     <h1 class="title">GAME_DEALER</h1>
                 </div>
-                <div class="card">
+                <div class="card card-input-section">
                     <div class="card-body">
                         <form id="form-input">
                             <label for="title-input">Search for a game:</label>
@@ -40,7 +40,7 @@
                                 <button type="button" class="btn btn-secondary game-rec">A third button item</button>
                                 <button type="button" class="btn btn-secondary game-rec">A fourth button item</button>
                                 <button type="button" class="btn btn-secondary game-rec">A disabled button item</button>
-                              </div>
+                            </div>
                         </div>
 
                     </div>
@@ -49,37 +49,81 @@
             </div>
 
             <!-- OUTPUT -->
-          
+
             <!-- Will be diplayed using jQuery -->
             <div class="col-lg-8 output-section">
                 <!-- Description of selected game -->
-                <div id="game-output">
-                    <h2>Lorem ipsum</h2>
-                    <img src="" alt="">
-                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatem repudiandae voluptate iste
-                        enim ut accusantium.</p>
+                <!-- <div class="cards-output-wrapper"> -->
+                <div class="card card-output-section mx-auto">
+                    <div id="game-output">
+                        <img src="https://static.wikia.nocookie.net/ultimatepopculture/images/9/92/Halo2-cover.png/revision/latest?cb=20200212141041"
+                            alt="">
+                        <div class="game-description-wrapper">
+                            <h3 class="game-title">Game title</h3>
+                            <p class="game-description">Game description</p>
+                            <p class="game-rating">Rating: </p>
+                        </div>
+                    </div>
+
                 </div>
                 <!-- List of selected game deals -->
-                <div id="game-deals">
-                    <ul>
-                        <li>
-                            <div class="game-deal">
+                <div class="card card-output-section mx-auto">
+                    <table class="table deal-table">
+                        <thead>
+                            <th scope="col">Store</th>
+                            <th scope="col">RP</th>
+                            <th scope="col">Sale Price</th>
+                            <th scope="col">%off</th>
+                            <th scope="col">Buy</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Store 1</td>
+                                <td>$</td>
+                                <td>$</td>
+                                <td>%</td>
+                                <!-- BUY BUTTON GOES HERE -->
+                            </tr>
+                            <tr>
+                                <td>Store 2</td>
+                                <td>$</td>
+                                <td>$</td>
+                                <td>%</td>
+                                <!-- BUY BUTTON GOES HERE -->
+                            </tr>
+                            <tr>
+                                <td>Store 3</td>
+                                <td>$</td>
+                                <td>$</td>
+                                <td>%</td>
+                                <!-- BUY BUTTON GOES HERE -->
+                            </tr>
+                        </tbody>
+                        <!-- <div id="game-deals">
+                            <ul>
+                                <li>
+                                    <div class="game-deal">
 
-                            </div>
-                        </li>
-                        <li>
-                            <div class="game-deal">
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="game-deal">
 
-                            </div>
-                        </li>
-                        <li>
-                            <div class="game-deal">
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="game-deal">Ï
 
-                            </div>
-                        </li>
-                    </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div> -->
+
+                    </table>
                 </div>
-            </div> 
+
+                <!-- </div> -->
+            </div>
 
         </div>
     </div>
