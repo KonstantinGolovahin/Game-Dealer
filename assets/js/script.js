@@ -68,6 +68,17 @@ function renderButtons() {
       $(taskButton).text(taskSaved[i].game);
       $(taskButton).attr("class", "btn btn-secondary w-100 mb-1 p-2");
       $("#games-history").append(taskButton);
+
+ // add click event for this button to search for a game
+
+ $(taskButton).on('click', function (e) {
+
+  queryRawgParams.search=$(e.target).text();
+  requestGame();
+
+});
+
+
     }
   }
 
@@ -87,7 +98,6 @@ function renderButtons() {
 
 
 function requestGame() {
-
 
   // clear previous records
   $("#games-list").empty();
@@ -110,7 +120,7 @@ function requestGame() {
       maxResponseLength = responseRAWG.results.length;
     }
 
-
+// action if no results returned
     if (responseRAWG.length === 0) {
 
       alert(textGameNotFound)
@@ -126,7 +136,7 @@ function requestGame() {
         let gameTitle = responseRAWG.results[i].name;
         let gameID = responseRAWG.results[i].id;
 
-        // dynamically create a set of buttons for ul (buttons only + data attribute as ID for getting game details)
+        // dynamically create a set of buttons for ul 
         let buttonContainer;
         buttonContainer = $("#games-list");
 
