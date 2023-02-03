@@ -53,12 +53,11 @@ function getTasks(arr) {
   return arr;
 }
 
-
 // render buttons for history
 function renderButtons() {
 
   // clear prevoius entries
-  $("#games-list").empty()
+  $("#games-history").empty()
   getTasks(taskSaved)
 
   if (taskSaved.length > 0) {
@@ -68,6 +67,14 @@ function renderButtons() {
       $(taskButton).text(taskSaved[i].game);
       $(taskButton).attr("class", "btn btn-secondary w-100 mb-1 p-2");
       $("#games-history").append(taskButton);
+      // adds button functionality
+      $(taskButton).on("click", function (e) {
+        //queries this game 
+        queryRawgParams.search = $(e.target).text();
+        requestGame();
+
+      })
+
     }
   }
 
@@ -76,10 +83,18 @@ function renderButtons() {
   $(clearHistoryButton).text("Clear history");
   $(clearHistoryButton).attr("class", "clearHistoryButton btn-danger btn  w-100 mb-1 p-2");
   $("#games-history").append(clearHistoryButton);
+  // adds button functionality
+  $(clearHistoryButton).on("click", function (e) {
+    //clears history
+    localStorage.clear();
+    $("#games-history").empty();
+
+  })
+
 
 }
 
-
+// search in RAWG database
 function requestGame() {
 
 
@@ -92,12 +107,24 @@ function requestGame() {
     method: "GET"
   }).then(function (responseRAWG) {
 
-    // console.log(responseRAWG)
+    console.log(responseRAWG)
+    // reduce amount of records to display
+    let maxResponseLength = 0
+    if (responseRAWG.results.length > 10) {
+      maxResponseLength = 10
 
+    }
+    else {
+      maxResponseLength = responseRAWG.results.length;
+    }
 
-    if (responseRAWG.length === 0) {
+    // action if no results returned
 
-      alert(textGameNotFound)
+    if (responseRAWG.results.length === 0) {
+      //Alert
+      $('#staticBackdrop').modal('show');
+      $('#staticBackdropLabel').text(textGameNotFound);
+
     }
 
     else {
@@ -122,18 +149,10 @@ function requestGame() {
 
       }
 
-
-
-
     }
 
-
-
-
     // adds click functionality to buttons to call cheapshark 
-
     $("#games-list").on("click", function (e) {
-
       // clear table rows
       $("#deals-table").empty();
       // get game name for Cheap Shark
@@ -147,10 +166,12 @@ function requestGame() {
         console.log(responseCheapShark)
 
         if (responseCheapShark.length === 0) {
-          // alert(textDealsNotFound)
+          //Alert
+          $('#staticBackdrop').modal('show');
+          $('#staticBackdropLabel').text(textDealsNotFound);
+
         }
         else {
-
 
           for (i = 0; i < responseCheapShark.length; i++) {
             //  console.log(responseCheapShark[i].title)
@@ -176,8 +197,6 @@ function requestGame() {
             $(".deal-table tbody").append(markup);
 
           }
-
-
         }
 
       });
@@ -215,53 +234,7 @@ function requestGame() {
 
 }
 
-// get a list of games based on user input
-$("#search-button").on('click', function (e) {
-  e.preventDefault();
 
-
-  // get user input
-  queryRawgParams.search = $("#title-input").val()
-  searchText = $("#title-input").val()
-
-  //alert(searchText)
-
-  if (queryRawgParams.search === "") {
-    // alert should be changed to modal (html+CSS)
-    // alert("Please enter game title")
-    $('#staticBackdrop').modal('show');
-    $('#staticBackdropLabel').text(textEmptyInput);
-
-  }
-
-  else {
-
-
-
-    // get updated list of games from storage 
-    taskObject = getTasks(taskSaved);
-
-    // object tot save to a local storage
-    let userSave = {
-
-      game: queryRawgParams.search,
-
-    }
-    // add new value to array
-    taskObject.push(userSave);
-    // save to local storage
-    localStorage.setItem("taskObject", JSON.stringify(taskObject));
-    // add this city to search history
-    taskSaved = taskObject;
-    renderButtons()
-
-
-    requestGame()
-
-
-  }
-
-});
 
 
 
@@ -279,19 +252,56 @@ function getStores() {
         storeID: responseStores[i].storeID,
         storeName: responseStores[i].storeName
 
-
       }
       // update list of stores
       storesArray.push(storeObject)
 
     }
 
-
   });
 }
 
 
+// get a list of games based on user input
+$("#search-button").on('click', function (e) {
+  e.preventDefault();
+
+  // get user input
+  queryRawgParams.search = $("#title-input").val()
+  searchText = $("#title-input").val()
+
+  if (queryRawgParams.search === "") {
+    //Alert
+    $('#staticBackdrop').modal('show');
+    $('#staticBackdropLabel').text(textEmptyInput);
+  }
+
+  else {
+
+    // get updated list of games from storage 
+    taskObject = getTasks(taskSaved);
+
+    // object to save to a local storage
+    let userSave = {
+      game: queryRawgParams.search,
+
+    }
+    // add new value to array
+    taskObject.push(userSave);
+    // save to local storage
+    localStorage.setItem("taskObject", JSON.stringify(taskObject));
+    // add this city to search history
+    taskSaved = taskObject;
+    renderButtons()
+    requestGame()
+
+  }
+
+});
+
+// get some data on load
 getStores()
+renderButtons()
 
 
 
