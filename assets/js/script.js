@@ -83,7 +83,7 @@ function renderButtons() {
 function requestGame() {
 
 
-// clear previous records
+  // clear previous records
   $("#games-list").empty();
 
   // API call
@@ -95,40 +95,40 @@ function requestGame() {
     // console.log(responseRAWG)
 
 
-if(responseRAWG.length===0){
+    if (responseRAWG.length === 0) {
 
-  alert(textGameNotFound)
-}
+      alert(textGameNotFound)
+    }
 
-else {
+    else {
 
-  for (i = 0; i < responseRAWG.results.length; i++) {
+      for (i = 0; i < responseRAWG.results.length; i++) {
 
-    // add elements to HTML + add classes from CSS
-    let gameTitle = responseRAWG.results[i].name;
-    let gameID = responseRAWG.results[i].id;
+        // add elements to HTML + add classes from CSS
+        let gameTitle = responseRAWG.results[i].name;
+        let gameID = responseRAWG.results[i].id;
 
-    // dynamically create a set of buttons for ul (buttons only + data attribute as ID for getting game details)
-    let buttonContainer;
-    buttonContainer = $("#games-list");
+        // dynamically create a set of buttons for ul (buttons only + data attribute as ID for getting game details)
+        let buttonContainer;
+        buttonContainer = $("#games-list");
 
-    // Title
-    let buttonTitle = $("<button>");
-    $(buttonTitle).text(gameTitle);
-    // Adds data and classes
-    $(buttonTitle).attr({ "data-gameid": gameID, class: "btn btn-secondary w-100 mb-1 p-2" });
-    //Adds new button to ul
-    $(buttonContainer).append(buttonTitle);
+        // Title
+        let buttonTitle = $("<button>");
+        $(buttonTitle).text(gameTitle);
+        // Adds data and classes
+        $(buttonTitle).attr({ "data-gameid": gameID, class: "btn btn-secondary w-100 mb-1 p-2" });
+        //Adds new button to ul
+        $(buttonContainer).append(buttonTitle);
 
-  }
-
-
+      }
 
 
-}
 
 
-   
+    }
+
+
+
 
     // adds click functionality to buttons to call cheapshark 
 
@@ -146,40 +146,40 @@ else {
 
         console.log(responseCheapShark)
 
-if(responseCheapShark.length===0){
- // alert(textDealsNotFound)
-}
-else{
+        if (responseCheapShark.length === 0) {
+          // alert(textDealsNotFound)
+        }
+        else {
 
 
-  for (i = 0; i < responseCheapShark.length; i++) {
-    //  console.log(responseCheapShark[i].title)
-    let gameRPrice = responseCheapShark[i].normalPrice;
-    let gameSPrice = responseCheapShark[i].salePrice;
-    let gameDealID = responseCheapShark[i].dealID;
-    let gamePlatformID = responseCheapShark[i].storeID;
-    let gamePlatformName;
+          for (i = 0; i < responseCheapShark.length; i++) {
+            //  console.log(responseCheapShark[i].title)
+            let gameRPrice = responseCheapShark[i].normalPrice;
+            let gameSPrice = responseCheapShark[i].salePrice;
+            let gameDealID = responseCheapShark[i].dealID;
+            let gamePlatformID = responseCheapShark[i].storeID;
+            let gamePlatformName;
 
-    // get store name from a previously received array
-    for (j = 0; j < storesArray.length; j++) {
-      if (gamePlatformID === storesArray[j].storeID) {
-        gamePlatformName = storesArray[j].storeName
-      }
+            // get store name from a previously received array
+            for (j = 0; j < storesArray.length; j++) {
+              if (gamePlatformID === storesArray[j].storeID) {
+                gamePlatformName = storesArray[j].storeName
+              }
 
-    }
+            }
 
-    //discount value as % from 100%
-    let gameDiscount = 100 - (Math.round(gameSPrice / gameRPrice * 100))
+            //discount value as % from 100%
+            let gameDiscount = 100 - (Math.round(gameSPrice / gameRPrice * 100))
 
-    // new row
-    let markup = "<tr><td>" + gamePlatformName + " </td><td>" + gameRPrice + "</td><td>" + gameSPrice + "</td><td>" + gameDiscount + "</td><td><a href=" + dealURL + gameDealID + ">Buy</a></td></tr>";
-    $(".deal-table tbody").append(markup);
+            // new row
+            let markup = "<tr><td>" + gamePlatformName + " </td><td>" + gameRPrice + "</td><td>" + gameSPrice + "</td><td>" + gameDiscount + "</td><td><a href=" + dealURL + gameDealID + ">Buy</a></td></tr>";
+            $(".deal-table tbody").append(markup);
 
-  }
+          }
 
 
-}
-     
+        }
+
       });
 
 
@@ -228,7 +228,10 @@ $("#search-button").on('click', function (e) {
 
   if (queryRawgParams.search === "") {
     // alert should be changed to modal (html+CSS)
-   // alert("Please enter game title")
+    // alert("Please enter game title")
+    $('#staticBackdrop').modal('show');
+    $('#staticBackdropLabel').text(textEmptyInput);
+
   }
 
   else {
