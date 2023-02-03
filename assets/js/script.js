@@ -66,7 +66,7 @@ function renderButtons() {
       // add button for each game
       let taskButton = document.createElement('button');
       $(taskButton).text(taskSaved[i].game);
-      $(taskButton).attr("class", "taskButton");
+      $(taskButton).attr("class", "btn btn-secondary w-100 mb-1 p-2");
       $("#games-history").append(taskButton);
     }
   }
@@ -74,7 +74,7 @@ function renderButtons() {
   // create clear history button
   let clearHistoryButton = document.createElement('button');
   $(clearHistoryButton).text("Clear history");
-  $(clearHistoryButton).attr("class", "clearHistoryButton");
+  $(clearHistoryButton).attr("class", "clearHistoryButton btn-danger btn  w-100 mb-1 p-2");
   $("#games-history").append(clearHistoryButton);
 
 }
@@ -116,7 +116,7 @@ else {
     let buttonTitle = $("<button>");
     $(buttonTitle).text(gameTitle);
     // Adds data and classes
-    $(buttonTitle).attr({ "data-gameid": gameID, class: "btn btn-secondary btn-block mb-1 p-2" });
+    $(buttonTitle).attr({ "data-gameid": gameID, class: "btn btn-secondary w-100 mb-1 p-2" });
     //Adds new button to ul
     $(buttonContainer).append(buttonTitle);
 
