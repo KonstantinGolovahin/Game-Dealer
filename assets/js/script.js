@@ -67,7 +67,7 @@ function renderButtons() {
       let taskButton = document.createElement('button');
       $(taskButton).text(taskSaved[i].game);
       $(taskButton).attr("class", "taskButton");
-      $("#history").append(taskButton);
+      $("#games-history").append(taskButton);
     }
   }
 
@@ -75,7 +75,7 @@ function renderButtons() {
   let clearHistoryButton = document.createElement('button');
   $(clearHistoryButton).text("Clear history");
   $(clearHistoryButton).attr("class", "clearHistoryButton");
-  $("#history").append(clearHistoryButton);
+  $("#games-history").append(clearHistoryButton);
 
 }
 
@@ -135,7 +135,7 @@ else {
     $("#games-list").on("click", function (e) {
 
       // clear table rows
-    //  $("#tbodyid").empty();
+      $("#deals-table").empty();
       // get game name for Cheap Shark
       queryCheapSharkURLParams.title = $(e.target).text();
 
