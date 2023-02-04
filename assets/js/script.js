@@ -29,6 +29,8 @@ let dealURL = "https://www.cheapshark.com/redirect?dealID="
 let textEmptyInput = "Please enter game title."
 let textGameNotFound = "Games not found. Please alter your search criteria."
 let textDealsNotFound = "No deals found. Please try another game."
+let textCheapSharkFails = "Unable to contact CheapShark API. Deals are not avialable."
+let textRawgFails= "Unable to contact RAWG API. Game search is not avialable."
 
 
 
@@ -94,7 +96,12 @@ function requestGame() {
   // API call
   $.ajax({
     url: queryRawgURL + $.param(queryRawgParams),
-    method: "GET"
+    method: "GET",
+    error:function(xhr, status, error) {
+      
+      $('#staticBackdrop').modal('show');
+      $('#staticBackdropLabel').text(textRawgFails);
+    }
   }).then(function (responseRAWG) {
 
     console.log(responseRAWG)
@@ -150,9 +157,13 @@ function requestGame() {
       
       $.ajax({
         url: queryCheapSharkURL + $.param(queryCheapSharkURLParams),
-        method: "GET"
+        method: "GET",
+        error:function(xhr, status, error) {
+      
+          $('#staticBackdrop').modal('show');
+          $('#staticBackdropLabel').text(textDealsNotFound);
+        }
       }).then(function (responseCheapShark) {
-        alert("Calling Cheap Shark")
         // console.log(responseCheapShark)
 
         if (responseCheapShark.length === 0) {
@@ -213,7 +224,12 @@ function requestGame() {
 
       $.ajax({
         url: queryRawgDetails + $.param(queryRawgDetailsParams),
-        method: "GET"
+        method: "GET",
+        error:function(xhr, status, error) {
+      
+          $('#staticBackdrop').modal('show');
+          $('#staticBackdropLabel').text(textRawgFails);
+        }
       }).then(function (responseRawgDetails) {
 
 
@@ -242,7 +258,12 @@ function requestGame() {
 function getStores() {
   $.ajax({
     url: storeListURL,
-    method: "GET"
+    method: "GET",
+    error:function(xhr, status, error) {
+      
+      $('#staticBackdrop').modal('show');
+      $('#staticBackdropLabel').text(textCheapSharkFails);
+    }
   }).then(function (responseStores) {
 
     for (i = 0; i < responseStores.length; i++) {
