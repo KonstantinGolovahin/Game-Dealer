@@ -1,7 +1,3 @@
-// search string
-let searchText
-// query for RAWG API call (1 stage) - exact search PC only, 10 units max
-
 // game name to be used for CheapShark API
 let resultGame = ""
 
@@ -17,10 +13,8 @@ let queryRawgDetails;
 //let queryRawgDetails = "https://api.rawg.io/api/games/" + gameID + "?"
 queryRawgDetailsParams = { "key": keyRAWG };
 
-// lists all deals for the specific input (10 deals, but still returns more)
-// let apiCheapSharkURL= "https://www.cheapshark.com/api/1.0/deals?title="+resultGame +"&limit=10"
 
-let queryCheapSharkURL = "https://www.cheapshark.com/api/1.0/deals?limit=10&exact=1&"
+let queryCheapSharkURL = "https://www.cheapshark.com/api/1.0/deals?limit=10&exact=1&sortBy=Price&"
 let queryCheapSharkURLParams = { "title": resultGame }
 
 
@@ -67,16 +61,10 @@ function renderButtons() {
       $(taskButton).text(taskSaved[i].game);
       $(taskButton).attr("class", "btn btn-secondary w-100 mb-1 p-2");
       $("#games-history").append(taskButton);
-      // adds button functionality
-      $(taskButton).on("click", function (e) {
-        //queries this game 
-        queryRawgParams.search = $(e.target).text();
-        requestGame();
-
-      })
-
+      
     }
   }
+
 
   // create clear history button
   let clearHistoryButton = document.createElement('button');
@@ -94,12 +82,14 @@ function renderButtons() {
 
 }
 
+
 // search in RAWG database
 function requestGame() {
 
 
   // clear previous records
   $("#games-list").empty();
+
 
   // API call
   $.ajax({
@@ -151,19 +141,19 @@ function requestGame() {
 
     }
 
-    // adds click functionality to buttons to call cheapshark 
-    $("#games-list").on("click", function (e) {
+    // adds click functionality to buttons to call cheapshark (.off clears prevoius binding. If removed, evet will be triggered multiple times)
+    $("#games-list").off("click").on("click", function (e) {
       // clear table rows
       $("#deals-table").empty();
       // get game name for Cheap Shark
       queryCheapSharkURLParams.title = $(e.target).text();
-
+      
       $.ajax({
         url: queryCheapSharkURL + $.param(queryCheapSharkURLParams),
         method: "GET"
       }).then(function (responseCheapShark) {
-
-        console.log(responseCheapShark)
+        alert("Calling Cheap Shark")
+        // console.log(responseCheapShark)
 
         if (responseCheapShark.length === 0) {
           //Alert
@@ -194,22 +184,21 @@ function requestGame() {
 
             // new row
             let markup = $("<tr>").append($("<td>").text(gamePlatformName))
-            .append($("<td>").text(gameRPrice))
-            .append($("<td>").text(gameSPrice))
-            .append($("<td>").text(gameDiscount))
-            .append($("<td>").append($("<a>", {
-              "href": dealURL + gameDealID,
-              "target": "_blank",
-              "class": "buyButton" 
-            }).text("Buy")));
+              .append($("<td>").text(gameRPrice))
+              .append($("<td>").text(gameSPrice))
+              .append($("<td>").text(gameDiscount))
+              .append($("<td>").append($("<a>", {
+                "href": dealURL + gameDealID,
+                "target": "_blank",
+                "class": "buyButton"
+              }).text("Buy")));
 
             $(".deal-table tbody").append(markup);
-
-            if (gameDiscount >= 50){
+           // colours discounts
+            if (gameDiscount >= 50) {
               $(".buyButton").css("background", "red");
             }
-
-
+            
           }
         }
 
@@ -249,10 +238,6 @@ function requestGame() {
 }
 
 
-
-
-
-
 // get a list of stores before searching for games
 function getStores() {
   $.ajax({
@@ -282,8 +267,7 @@ $("#search-button").on('click', function (e) {
 
   // get user input
   queryRawgParams.search = $("#title-input").val()
-  searchText = $("#title-input").val()
-
+ 
   if (queryRawgParams.search === "") {
     //Alert
     $('#staticBackdrop').modal('show');
@@ -312,6 +296,18 @@ $("#search-button").on('click', function (e) {
   }
 
 });
+
+
+$("#games-history").on("click", function (e) {
+  //queries this game 
+  e.preventDefault()
+  e.stopPropagation();
+  $("#title-input").text("");
+  queryRawgParams.search = $(e.target).text();
+  requestGame();
+
+})
+
 
 // get some data on load
 getStores()
