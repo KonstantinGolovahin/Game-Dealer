@@ -69,9 +69,29 @@ body {
   height: 100%;
 }
 
-.src-btn:hover,
-.game-rec:hover {
-  box-shadow: 0px 0px 5px 5px red;
+.btn {
+  background-color: #4f7e7c;
+  color: #fff;
+}
+
+.btn:hover {
+  background-color: #4fbf6e;
+}
+.btn:active {
+  background-color: #4fbf6e;
+}
+
+#search-button {
+  background-color: #53a788;
+  color: #fff;
+}
+
+.clearHistoryButton {
+  background-color: #902e29;
+}
+
+.clearHistoryButton:hover {
+  background-color: #bb342d;
 }
 
 /* OUTPUT SECTION COLUMN */
