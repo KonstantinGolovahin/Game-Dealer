@@ -6,7 +6,7 @@
 body {
   font-family: "DM Sans", sans-serif;
   color: #fff;
-  background-image: url(../img/BG.png);
+  background-image: url("../img/BG.png");
   background-repeat: no-repeat;
 }
 
@@ -140,6 +140,10 @@ body {
   font-weight: bold;
   line-height: 25px;
   text-decoration: none;
+}
+
+#deals-table {
+  background-color: #324d51;
 }
 
 #deals-table tr:nth-child(odd) {
