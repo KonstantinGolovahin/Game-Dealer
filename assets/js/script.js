@@ -284,9 +284,9 @@ $("#games-history").on("click", function (e) {
 // Button click to get anticipated games
 $("#popular-games").on("click", function (e) {
   //queries this game 
- // e.preventDefault()
   e.stopPropagation();
   $("#title-input").text("");
+  
   requestAnticipatedGames();
 
 })
@@ -294,7 +294,9 @@ $("#popular-games").on("click", function (e) {
 // get most anticipated games for next year (10 games maxfor PC)
 
 function requestAnticipatedGames() {
-
+  // nullifies prevoius search results if exists
+  queryRawgParams.search = null;
+  // generates new year
   let nextYear = new Date().getFullYear() + 1;
   queryRAWGanticipatedURL = "https://api.rawg.io/api/games?platforms=4&page_size=10&page=1&dates=" + nextYear + "-01-01," + nextYear + "-12-31&ordering=-added&"
 
@@ -382,13 +384,6 @@ function requestAnticipatedGames() {
 }
 
 
-// get some data on load
-getStores()
-renderButtons()
-
-
-
-
 
 
 // generate a list of buttons for each game
@@ -454,13 +449,9 @@ function buildTable(dataReceived) {
       $(".buyButton").css("background", "red");
     }
 
-
   }
 
-
 }
-
-
 
 // generate game details
 function buildDetails(dataReceived) {
@@ -478,3 +469,14 @@ function buildDetails(dataReceived) {
 
 
 }
+
+
+// get some data on load
+getStores()
+renderButtons()
+
+
+
+
+
+
