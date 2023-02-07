@@ -1,3 +1,5 @@
+let keyRAWG="4d3c85eb44b84a48a052214685745b50";
+
 // game name to be used for CheapShark API
 let resultGame = ""
 
@@ -7,11 +9,10 @@ let queryRawgParams = { "key": keyRAWG };
 queryRawgParams.search
 
 // query to get game details requires ID (can be stored to history)
-
 let gameID;
 let queryRawgDetails;
 //let queryRawgDetails = "https://api.rawg.io/api/games/" + gameID + "?"
-queryRawgDetailsParams = { "key": keyRAWG };
+//queryRawgDetailsParams = { "key": keyRAWG };
 
 
 let queryCheapSharkURL = "https://www.cheapshark.com/api/1.0/deals?limit=10&exact=1&sortBy=Price&"
@@ -22,6 +23,7 @@ let queryCheapSharkURLParams = { "title": resultGame }
 let storeListURL = "https://www.cheapshark.com/api/1.0/stores"
 let storesArray = []
 
+// Deal details
 let dealURL = "https://www.cheapshark.com/redirect?dealID="
 
 
@@ -61,7 +63,7 @@ function renderButtons() {
       // add button for each game
       let taskButton = document.createElement('button');
       $(taskButton).text(taskSaved[i].game);
-      $(taskButton).attr("class", "btn btn-secondary w-100 mb-1 p-2");
+      $(taskButton).attr("class", "btn  w-100 mb-1 p-2");
       $("#games-history").append(taskButton);
 
     }
@@ -104,7 +106,7 @@ function requestGame() {
     }
   }).then(function (responseRAWG) {
 
-    console.log(responseRAWG)
+   // console.log(responseRAWG)
     // reduce amount of records to display
     let maxResponseLength = 0
     if (responseRAWG.results.length > 10) {
@@ -140,7 +142,7 @@ function requestGame() {
         let buttonTitle = $("<button>");
         $(buttonTitle).text(gameTitle);
         // Adds data and classes
-        $(buttonTitle).attr({ "data-gameid": gameID, class: "btn btn-secondary w-100 mb-1 p-2" });
+        $(buttonTitle).attr({ "data-gameid": gameID, class: "btn  w-100 mb-1 p-2" });
         //Adds new button to ul
         $(buttonContainer).append(buttonTitle);
 
@@ -222,7 +224,7 @@ function requestGame() {
       queryRawgDetails = "https://api.rawg.io/api/games/" + gameID + "?"
 
       $.ajax({
-        url: queryRawgDetails + $.param(queryRawgDetailsParams),
+        url: queryRawgDetails + $.param(queryRawgParams),
         method: "GET",
         error: function (xhr, status, error) {
 
@@ -318,6 +320,8 @@ $("#search-button").on('click', function (e) {
 });
 
 
+
+// Button click on history
 $("#games-history").on("click", function (e) {
   //queries this game 
   e.preventDefault()
@@ -328,12 +332,21 @@ $("#games-history").on("click", function (e) {
 
 })
 
+// Button click to get anticipated games
+$("#popular-games").on("click", function (e) {
+  //queries this game 
+ // e.preventDefault()
+ // e.stopPropagation();
+  $("#title-input").text("");
+  requestAnticipatedGames();
+
+})
+
 // get most anticipated games for next year (10 games maxfor PC)
 
 function requestAnticipatedGames() {
 
   let nextYear = new Date().getFullYear() + 1;
-
   queryRAWGanticipatedURL = "https://api.rawg.io/api/games?platforms=4&page_size=10&page=1&dates=" + nextYear + "-01-01," + nextYear + "-12-31&ordering=-added&"
 
   // clear previous records
@@ -345,7 +358,7 @@ function requestAnticipatedGames() {
     method: "GET"
   }).then(function (responseRAWG) {
 
-    console.log(responseRAWG)
+   // console.log(responseRAWG)
     // reduce amount of records to display
     let maxResponseLength = 0
     if (responseRAWG.results.length > 10) {
@@ -381,7 +394,7 @@ function requestAnticipatedGames() {
         let buttonTitle = $("<button>");
         $(buttonTitle).text(gameTitle);
         // Adds data and classes
-        $(buttonTitle).attr({ "data-gameid": gameID, class: "btn btn-secondary w-100 mb-1 p-2" });
+        $(buttonTitle).attr({ "data-gameid": gameID, class: "btn w-100 mb-1 p-2" });
         //Adds new button to ul
         $(buttonContainer).append(buttonTitle);
 
@@ -401,7 +414,7 @@ function requestAnticipatedGames() {
         method: "GET"
       }).then(function (responseCheapShark) {
 
-        console.log(responseCheapShark)
+       // console.log(responseCheapShark)
 
         if (responseCheapShark.length === 0) {
           //Alert
@@ -460,11 +473,10 @@ function requestAnticipatedGames() {
       gameID = $(e.target).attr('data-gameid');
       queryRawgDetails = "https://api.rawg.io/api/games/" + gameID + "?"
 
-      $.ajax({
+       $.ajax({
         url: queryRawgDetails + $.param(queryRawgDetailsParams),
         method: "GET"
       }).then(function (responseRawgDetails) {
-
 
         // get elements
         let gameTitle = responseRawgDetails.name;
@@ -478,15 +490,13 @@ function requestAnticipatedGames() {
         $("#game-output").find("img").attr({ src: gamebackgroundURL, alt: gameTitle });
         //  console.log(responseRawgDetails)
 
-      });
+      }); 
 
     })
 
   });
 
 }
-
-$("#popular-games").on("click", requestAnticipatedGames)
 
 
 // get some data on load
