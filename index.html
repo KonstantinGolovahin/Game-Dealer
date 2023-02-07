@@ -30,12 +30,12 @@
                         <label id="form-heading" class="title-input h4">Search for a game:</label>
                         <div class="input-group mb-3">
                             <input type="text" name="game-title" id="title-input" class="form-control" />
-                            <button type="button" class="btn btn-secondary" id="search-button">
+                            <button type="button" class="btn" id="search-button">
                                 SEARCH
                             </button>
                         </div>
                         <div class="popular-games-btn">
-                            <button type="button" class="btn btn-secondary" id="popular-games">Show popular games</button>
+                            <button type="button" class="btn popular-games-btn" id="popular-games">Show popular games</button>
                         </div>
                         <hr class="divider">
                     </form>
@@ -52,8 +52,8 @@
                         <ul id="games-history" class="col-8 d-flex flex-column">
                         </ul>
                     </section>
-
                 </div>
+                <footer class="h6 fw-light">Powered by RAWG and CheapShark API</footer>
             </div>
         </aside>
 
@@ -68,8 +68,8 @@
                         <img src="" alt="" class="img-fluid">
                     </div>
                     <div class="col-lg-8 my-5 flex-column" id="game-description-wrapper">
-                        <h3 class="game-title"></h3>
-                        <p class="game-description"></p>
+                        <h3 class="game-title display-4"></h3>
+                        <p class="game-description overflow-y-auto pr-2"></p>
                         <p class="game-rating"></p>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
             <!-- List of selected game deals -->
             <div class="card card-output-section w-100 mx-auto">
                 <table class="table deal-table">
-                    <thead>
+                    <thead class="deals-header">
                         <th class="text-center" scope="col">Store</th>
                         <th class="text-center" scope="col">RP</th>
                         <th class="text-center" scope="col">Sale Price</th>
