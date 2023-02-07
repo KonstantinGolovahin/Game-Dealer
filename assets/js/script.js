@@ -30,7 +30,7 @@ let textEmptyInput = "Please enter game title."
 let textGameNotFound = "Games not found. Please alter your search criteria."
 let textDealsNotFound = "No deals found. Please try another game."
 let textCheapSharkFails = "Unable to contact CheapShark API. Deals are not avialable."
-let textRawgFails= "Unable to contact RAWG API. Game search is not avialable."
+let textRawgFails = "Unable to contact RAWG API. Game search is not avialable."
 
 
 
@@ -63,7 +63,7 @@ function renderButtons() {
       $(taskButton).text(taskSaved[i].game);
       $(taskButton).attr("class", "btn btn-secondary w-100 mb-1 p-2");
       $("#games-history").append(taskButton);
-      
+
     }
   }
 
@@ -97,8 +97,8 @@ function requestGame() {
   $.ajax({
     url: queryRawgURL + $.param(queryRawgParams),
     method: "GET",
-    error:function(xhr, status, error) {
-      
+    error: function (xhr, status, error) {
+
       $('#staticBackdrop').modal('show');
       $('#staticBackdropLabel').text(textRawgFails);
     }
@@ -154,12 +154,12 @@ function requestGame() {
       $("#deals-table").empty();
       // get game name for Cheap Shark
       queryCheapSharkURLParams.title = $(e.target).text();
-      
+
       $.ajax({
         url: queryCheapSharkURL + $.param(queryCheapSharkURLParams),
         method: "GET",
-        error:function(xhr, status, error) {
-      
+        error: function (xhr, status, error) {
+
           $('#staticBackdrop').modal('show');
           $('#staticBackdropLabel').text(textDealsNotFound);
         }
@@ -205,11 +205,10 @@ function requestGame() {
               }).text("Buy")));
 
             $(".deal-table tbody").append(markup);
-           // colours discounts
+            // colours discounts
             if (gameDiscount >= 50) {
               $(".buyButton").css("background", "red");
             }
-            
           }
         }
 
@@ -225,8 +224,8 @@ function requestGame() {
       $.ajax({
         url: queryRawgDetails + $.param(queryRawgDetailsParams),
         method: "GET",
-        error:function(xhr, status, error) {
-      
+        error: function (xhr, status, error) {
+
           $('#staticBackdrop').modal('show');
           $('#staticBackdropLabel').text(textRawgFails);
         }
@@ -259,8 +258,8 @@ function getStores() {
   $.ajax({
     url: storeListURL,
     method: "GET",
-    error:function(xhr, status, error) {
-      
+    error: function (xhr, status, error) {
+
       $('#staticBackdrop').modal('show');
       $('#staticBackdropLabel').text(textCheapSharkFails);
     }
@@ -288,7 +287,7 @@ $("#search-button").on('click', function (e) {
 
   // get user input
   queryRawgParams.search = $("#title-input").val()
- 
+
   if (queryRawgParams.search === "") {
     //Alert
     $('#staticBackdrop').modal('show');
