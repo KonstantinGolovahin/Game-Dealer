@@ -194,18 +194,18 @@ function requestGame() {
 
             // new row
             let markup = $("<tr>").append($("<td>").text(gamePlatformName))
-            .append($("<td>").text(gameRPrice))
-            .append($("<td>").text(gameSPrice))
-            .append($("<td>").text(gameDiscount))
-            .append($("<td>").append($("<a>", {
-              "href": dealURL + gameDealID,
-              "target": "_blank",
-              "class": "buyButton" 
-            }).text("Buy")));
+              .append($("<td>").text(gameRPrice))
+              .append($("<td>").text(gameSPrice))
+              .append($("<td>").text(gameDiscount))
+              .append($("<td>").append($("<a>", {
+                "href": dealURL + gameDealID,
+                "target": "_blank",
+                "class": "buyButton"
+              }).text("Buy")));
 
             $(".deal-table tbody").append(markup);
 
-            if (gameDiscount >= 50){
+            if (gameDiscount >= 50) {
               $(".buyButton").css("background", "red");
             }
 
