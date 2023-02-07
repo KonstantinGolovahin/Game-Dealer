@@ -1,13 +1,12 @@
 :root {
   --left-main: #72c2a47e;
   --left-input-card: #0c0d14;
-  --right-game-table: ;
 }
 
 body {
   font-family: "DM Sans", sans-serif;
   color: #fff;
-  background-image: url(/assets/img/BG.png);
+  background-image: url(../img/BG.png);
   background-repeat: no-repeat;
 }
 
@@ -97,15 +96,6 @@ body {
 
 /* OUTPUT SECTION COLUMN */
 .output-section {
-  /* background-color: rgb(12, 13, 20);
-  background: linear-gradient(
-    0deg,
-    rgba(12, 13, 20, 1) 0%,
-    rgba(24, 28, 40, 1) 100%
-  ); */
-
-  /* background-image: url(/assets/img/BG.png); */
-
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
