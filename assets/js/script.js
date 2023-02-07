@@ -11,13 +11,9 @@ queryRawgParams.search
 // query to get game details requires ID (can be stored to history)
 let gameID;
 let queryRawgDetails;
-//let queryRawgDetails = "https://api.rawg.io/api/games/" + gameID + "?"
-//queryRawgDetailsParams = { "key": keyRAWG };
-
 
 let queryCheapSharkURL = "https://www.cheapshark.com/api/1.0/deals?limit=10&exact=1&sortBy=Price&"
 let queryCheapSharkURLParams = { "title": resultGame }
-
 
 // get list of stores for deals
 let storeListURL = "https://www.cheapshark.com/api/1.0/stores"
@@ -26,7 +22,6 @@ let storesArray = []
 // Deal details
 let dealURL = "https://www.cheapshark.com/redirect?dealID="
 
-
 // Alerts For modals
 let textEmptyInput = "Please enter game title."
 let textGameNotFound = "Games not found. Please alter your search criteria."
@@ -34,12 +29,9 @@ let textDealsNotFound = "No deals found. Please try another game."
 let textCheapSharkFails = "Unable to contact CheapShark API. Deals are not avialable."
 let textRawgFails = "Unable to contact RAWG API. Game search is not avialable."
 
-
-
 // new array for values from a local storage
 let taskSaved = [];
 taskSaved = getTasks(taskSaved);
-
 
 // retrieve saved values from local storage if any exists
 function getTasks(arr) {
@@ -69,7 +61,6 @@ function renderButtons() {
     }
   }
 
-
   // create clear history button
   let clearHistoryButton = document.createElement('button');
   $(clearHistoryButton).text("Clear history");
@@ -83,31 +74,27 @@ function renderButtons() {
 
   })
 
-
 }
 
 
 // search in RAWG database
 function requestGame() {
 
-
   // clear previous records
   $("#games-list").empty();
-
 
   // API call
   $.ajax({
     url: queryRawgURL + $.param(queryRawgParams),
     method: "GET",
     error: function (xhr, status, error) {
-
-      $('#staticBackdrop').modal('show');
-      $('#staticBackdropLabel').text(textRawgFails);
+  
+      buildModal(textRawgFails)
+           
     }
   }).then(function (responseRAWG) {
 
-   // console.log(responseRAWG)
-    // reduce amount of records to display
+      // reduce amount of records to display
     let maxResponseLength = 0
     if (responseRAWG.results.length > 10) {
       maxResponseLength = 10
@@ -121,9 +108,8 @@ function requestGame() {
 
     if (responseRAWG.results.length === 0) {
       //Alert
-      $('#staticBackdrop').modal('show');
-      $('#staticBackdropLabel').text(textGameNotFound);
-
+      buildModal(textGameNotFound)
+     
     }
 
     else {
@@ -143,19 +129,16 @@ function requestGame() {
         url: queryCheapSharkURL + $.param(queryCheapSharkURLParams),
         method: "GET",
         error: function (xhr, status, error) {
-          alert("No deals error")
-          $('#staticBackdrop').modal('show');
-          $('#staticBackdropLabel').text(textDealsNotFound);
+         
+          buildModal(textDealsNotFound)
+         
         }
       }).then(function (responseCheapShark) {
-        // console.log(responseCheapShark)
-
+     
         if (responseCheapShark.length === 0) {
           //Alert
-          alert("No deals length 0")
-          $('#staticBackdrop').modal('show');
-          $('#staticBackdropLabel').text(textDealsNotFound);
-
+          buildModal(textDealsNotFound)
+        
         }
         else {
 
@@ -164,7 +147,6 @@ function requestGame() {
         }
 
       });
-
 
       // second call to get game details using RAWG single game details
 
@@ -176,25 +158,14 @@ function requestGame() {
         url: queryRawgDetails + $.param(queryRawgParams),
         method: "GET",
         error: function (xhr, status, error) {
-
-          $('#staticBackdrop').modal('show');
-          $('#staticBackdropLabel').text(textRawgFails);
+         
+          buildModal(textRawgFails)
+         
         }
       }).then(function (responseRawgDetails) {
 
         buildDetails(responseRawgDetails)
-       /*  // get elements
-        let gameTitle = responseRawgDetails.name;
-        let gameDescription = responseRawgDetails.description_raw;
-        let gamebackgroundURL = responseRawgDetails.background_image;
-        let gameRating = responseRawgDetails.rating;
-        // display elements
-        $(".game-title").text(gameTitle)
-        $(".game-description").text(gameDescription)
-        $(".game-rating").text("Rating: " + gameRating)
-        $("#game-output").find("img").attr({ src: gamebackgroundURL, alt: gameTitle });
-        //  console.log(responseRawgDetails) */
-
+       
       });
 
     })
@@ -210,9 +181,9 @@ function getStores() {
     url: storeListURL,
     method: "GET",
     error: function (xhr, status, error) {
-
-      $('#staticBackdrop').modal('show');
-      $('#staticBackdropLabel').text(textCheapSharkFails);
+     
+      buildModal(textCheapSharkFails)
+      
     }
   }).then(function (responseStores) {
 
@@ -232,65 +203,6 @@ function getStores() {
 }
 
 
-// get a list of games based on user input
-$("#search-button").on('click', function (e) {
-  e.preventDefault();
-
-  // get user input
-  queryRawgParams.search = $("#title-input").val()
-
-  if (queryRawgParams.search === "") {
-    //Alert
-    $('#staticBackdrop').modal('show');
-    $('#staticBackdropLabel').text(textEmptyInput);
-  }
-
-  else {
-
-    // get updated list of games from storage 
-    taskObject = getTasks(taskSaved);
-
-    // object to save to a local storage
-    let userSave = {
-      game: queryRawgParams.search,
-
-    }
-    // add new value to array
-    taskObject.push(userSave);
-    // save to local storage
-    localStorage.setItem("taskObject", JSON.stringify(taskObject));
-    // add this city to search history
-    taskSaved = taskObject;
-    renderButtons()
-    requestGame()
-
-  }
-
-});
-
-
-
-// Button click on history
-$("#games-history").on("click", function (e) {
-  //queries this game 
-  e.preventDefault()
-  e.stopPropagation();
-  $("#title-input").text("");
-  queryRawgParams.search = $(e.target).text();
-  requestGame();
-
-})
-
-// Button click to get anticipated games
-$("#popular-games").on("click", function (e) {
-  //queries this game 
-  e.stopPropagation();
-  $("#title-input").text("");
-  
-  requestAnticipatedGames();
-
-})
-
 // get most anticipated games for next year (10 games maxfor PC)
 
 function requestAnticipatedGames() {
@@ -309,8 +221,7 @@ function requestAnticipatedGames() {
     method: "GET"
   }).then(function (responseRAWG) {
 
-   // console.log(responseRAWG)
-    // reduce amount of records to display
+      // reduce amount of records to display
     let maxResponseLength = 0
     if (responseRAWG.results.length > 10) {
       maxResponseLength = 10
@@ -324,9 +235,8 @@ function requestAnticipatedGames() {
 
     if (responseRAWG.results.length === 0) {
       //Alert
-      $('#staticBackdrop').modal('show');
-      $('#staticBackdropLabel').text(textGameNotFound);
-
+      buildModal(textGameNotFound)
+  
     }
 
     else {
@@ -347,13 +257,10 @@ function requestAnticipatedGames() {
         method: "GET"
       }).then(function (responseCheapShark) {
 
-       // console.log(responseCheapShark)
-
-        if (responseCheapShark.length === 0) {
+          if (responseCheapShark.length === 0) {
           //Alert
-          $('#staticBackdrop').modal('show');
-          $('#staticBackdropLabel').text(textDealsNotFound);
-
+          buildModal(textDealsNotFound)
+        
         }
         else {
           
@@ -382,8 +289,6 @@ function requestAnticipatedGames() {
   });
 
 }
-
-
 
 
 // generate a list of buttons for each game
@@ -469,6 +374,78 @@ function buildDetails(dataReceived) {
 
 
 }
+
+// display modal with a message
+function buildModal(text) {
+
+   //Alert
+   $("#modalText").text(text);
+   $("#staticBackdrop").modal("show");
+   
+}
+
+///////////////////// Buttons //////////////
+
+// get a list of games based on user input
+$("#search-button").on('click', function (e) {
+  e.preventDefault();
+
+  // get user input
+  queryRawgParams.search = $("#title-input").val()
+
+  if (queryRawgParams.search === "") {
+    //Alert
+    buildModal(textEmptyInput)
+   
+  }
+
+  else {
+
+    // get updated list of games from storage 
+    taskObject = getTasks(taskSaved);
+
+    // object to save to a local storage
+    let userSave = {
+      game: queryRawgParams.search,
+
+    }
+    // add new value to array
+    taskObject.push(userSave);
+    // save to local storage
+    localStorage.setItem("taskObject", JSON.stringify(taskObject));
+    // add this city to search history
+    taskSaved = taskObject;
+    renderButtons()
+    requestGame()
+
+  }
+
+});
+
+// Button click on history
+$("#games-history").on("click", function (e) {
+  //queries this game 
+  e.preventDefault()
+  e.stopPropagation();
+  $("#title-input").text("");
+
+  // prevent API call if user deletes history
+if($(e.target).text()!="Clear history") {
+  queryRawgParams.search = $(e.target).text();
+  requestGame();
+}
+  
+})
+
+// Button click to get anticipated games
+$("#popular-games").on("click", function (e) {
+  //queries this game 
+  e.stopPropagation();
+  $("#title-input").text("");
+  
+  requestAnticipatedGames();
+
+})
 
 
 // get some data on load

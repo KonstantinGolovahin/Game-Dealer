@@ -150,3 +150,12 @@ body {
   background-color: #0000004b;
   color: white;
 }
+
+#modalText{
+
+  font-family:'Courier New', Courier, monospace;
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+  align-items: center;
+
+}
