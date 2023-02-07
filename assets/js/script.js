@@ -328,6 +328,166 @@ $("#games-history").on("click", function (e) {
 
 })
 
+// get most anticipated games for next year (10 games maxfor PC)
+
+function requestAnticipatedGames() {
+
+  let nextYear = new Date().getFullYear() + 1;
+
+  queryRAWGanticipatedURL = "https://api.rawg.io/api/games?platforms=4&page_size=10&page=1&dates=" + nextYear + "-01-01," + nextYear + "-12-31&ordering=-added&"
+
+  // clear previous records
+  $("#games-list").empty();
+
+  // API call
+  $.ajax({
+    url: queryRAWGanticipatedURL + $.param(queryRawgParams),
+    method: "GET"
+  }).then(function (responseRAWG) {
+
+    console.log(responseRAWG)
+    // reduce amount of records to display
+    let maxResponseLength = 0
+    if (responseRAWG.results.length > 10) {
+      maxResponseLength = 10
+
+    }
+    else {
+      maxResponseLength = responseRAWG.results.length;
+    }
+
+    // action if no results returned
+
+    if (responseRAWG.results.length === 0) {
+      //Alert
+      $('#staticBackdrop').modal('show');
+      $('#staticBackdropLabel').text(textGameNotFound);
+
+    }
+
+    else {
+
+      for (i = 0; i < responseRAWG.results.length; i++) {
+
+        // add elements to HTML + add classes from CSS
+        let gameTitle = responseRAWG.results[i].name;
+        let gameID = responseRAWG.results[i].id;
+
+        // dynamically create a set of buttons for ul (buttons only + data attribute as ID for getting game details)
+        let buttonContainer;
+        buttonContainer = $("#games-list");
+
+        // Title
+        let buttonTitle = $("<button>");
+        $(buttonTitle).text(gameTitle);
+        // Adds data and classes
+        $(buttonTitle).attr({ "data-gameid": gameID, class: "btn btn-secondary w-100 mb-1 p-2" });
+        //Adds new button to ul
+        $(buttonContainer).append(buttonTitle);
+
+      }
+
+    }
+
+    // adds click functionality to buttons to call cheapshark 
+    $("#games-list").on("click", function (e) {
+      // clear table rows
+      $("#deals-table").empty();
+      // get game name for Cheap Shark
+      queryCheapSharkURLParams.title = $(e.target).text();
+
+      $.ajax({
+        url: queryCheapSharkURL + $.param(queryCheapSharkURLParams),
+        method: "GET"
+      }).then(function (responseCheapShark) {
+
+        console.log(responseCheapShark)
+
+        if (responseCheapShark.length === 0) {
+          //Alert
+          $('#staticBackdrop').modal('show');
+          $('#staticBackdropLabel').text(textDealsNotFound);
+
+        }
+        else {
+
+          for (i = 0; i < responseCheapShark.length; i++) {
+            //  console.log(responseCheapShark[i].title)
+            let gameRPrice = responseCheapShark[i].normalPrice;
+            let gameSPrice = responseCheapShark[i].salePrice;
+            let gameDealID = responseCheapShark[i].dealID;
+            let gamePlatformID = responseCheapShark[i].storeID;
+            let gamePlatformName;
+
+            // get store name from a previously received array
+            for (j = 0; j < storesArray.length; j++) {
+              if (gamePlatformID === storesArray[j].storeID) {
+                gamePlatformName = storesArray[j].storeName
+              }
+
+            }
+
+            //discount value as % from 100%
+            let gameDiscount = 100 - (Math.round(gameSPrice / gameRPrice * 100))
+
+            // new row
+            let markup = $("<tr>").append($("<td>").text(gamePlatformName))
+              .append($("<td>").text(gameRPrice))
+              .append($("<td>").text(gameSPrice))
+              .append($("<td>").text(gameDiscount))
+              .append($("<td>").append($("<a>", {
+                "href": dealURL + gameDealID,
+                "target": "_blank",
+                "class": "buyButton"
+              }).text("Buy")));
+
+            $(".deal-table tbody").append(markup);
+
+            if (gameDiscount >= 50) {
+              $(".buyButton").css("background", "red");
+            }
+
+
+          }
+        }
+
+      });
+
+
+      // second call to get game details using RAWG single game details
+
+      // need a game ID
+      gameID = $(e.target).attr('data-gameid');
+      queryRawgDetails = "https://api.rawg.io/api/games/" + gameID + "?"
+
+      $.ajax({
+        url: queryRawgDetails + $.param(queryRawgDetailsParams),
+        method: "GET"
+      }).then(function (responseRawgDetails) {
+
+
+        // get elements
+        let gameTitle = responseRawgDetails.name;
+        let gameDescription = responseRawgDetails.description_raw;
+        let gamebackgroundURL = responseRawgDetails.background_image;
+        let gameRating = responseRawgDetails.rating;
+        // display elements
+        $(".game-title").text(gameTitle)
+        $(".game-description").text(gameDescription)
+        $(".game-rating").text("Rating: " + gameRating)
+        $("#game-output").find("img").attr({ src: gamebackgroundURL, alt: gameTitle });
+        //  console.log(responseRawgDetails)
+
+      });
+
+    })
+
+  });
+
+}
+
+$("#popular-games").on("click", requestAnticipatedGames)
+
 
 // get some data on load
 getStores()
