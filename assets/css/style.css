@@ -5,6 +5,7 @@
 }
 
 body {
+  font-family: "DM Sans", sans-serif;
   color: #fff;
   background-image: url(/assets/img/BG.png);
   background-repeat: no-repeat;
@@ -20,7 +21,7 @@ body {
 }
 
 .input-section {
-  font-family: "Barlow", sans-serif;
+  font-family: "DM Sans", sans-serif;
   padding: 10px;
   text-align: center;
   background-color: var(--left-main);
