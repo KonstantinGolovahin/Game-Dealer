@@ -203,65 +203,6 @@ function getStores() {
 }
 
 
-// get a list of games based on user input
-$("#search-button").on('click', function (e) {
-  e.preventDefault();
-
-  // get user input
-  queryRawgParams.search = $("#title-input").val()
-
-  if (queryRawgParams.search === "") {
-    //Alert
-    buildModal(textEmptyInput)
-   
-  }
-
-  else {
-
-    // get updated list of games from storage 
-    taskObject = getTasks(taskSaved);
-
-    // object to save to a local storage
-    let userSave = {
-      game: queryRawgParams.search,
-
-    }
-    // add new value to array
-    taskObject.push(userSave);
-    // save to local storage
-    localStorage.setItem("taskObject", JSON.stringify(taskObject));
-    // add this city to search history
-    taskSaved = taskObject;
-    renderButtons()
-    requestGame()
-
-  }
-
-});
-
-
-
-// Button click on history
-$("#games-history").on("click", function (e) {
-  //queries this game 
-  e.preventDefault()
-  e.stopPropagation();
-  $("#title-input").text("");
-  queryRawgParams.search = $(e.target).text();
-  requestGame();
-
-})
-
-// Button click to get anticipated games
-$("#popular-games").on("click", function (e) {
-  //queries this game 
-  e.stopPropagation();
-  $("#title-input").text("");
-  
-  requestAnticipatedGames();
-
-})
-
 // get most anticipated games for next year (10 games maxfor PC)
 
 function requestAnticipatedGames() {
@@ -350,8 +291,6 @@ function requestAnticipatedGames() {
 }
 
 
-
-
 // generate a list of buttons for each game
 function buildButtons(dataReceived){
 
@@ -436,7 +375,6 @@ function buildDetails(dataReceived) {
 
 }
 
-
 // display modal with a message
 function buildModal(text) {
 
@@ -445,6 +383,70 @@ function buildModal(text) {
    $("#staticBackdrop").modal("show");
    
 }
+
+///////////////////// Buttons //////////////
+
+// get a list of games based on user input
+$("#search-button").on('click', function (e) {
+  e.preventDefault();
+
+  // get user input
+  queryRawgParams.search = $("#title-input").val()
+
+  if (queryRawgParams.search === "") {
+    //Alert
+    buildModal(textEmptyInput)
+   
+  }
+
+  else {
+
+    // get updated list of games from storage 
+    taskObject = getTasks(taskSaved);
+
+    // object to save to a local storage
+    let userSave = {
+      game: queryRawgParams.search,
+
+    }
+    // add new value to array
+    taskObject.push(userSave);
+    // save to local storage
+    localStorage.setItem("taskObject", JSON.stringify(taskObject));
+    // add this city to search history
+    taskSaved = taskObject;
+    renderButtons()
+    requestGame()
+
+  }
+
+});
+
+// Button click on history
+$("#games-history").on("click", function (e) {
+  //queries this game 
+  e.preventDefault()
+  e.stopPropagation();
+  $("#title-input").text("");
+
+  // prevent API call if user deletes history
+if($(e.target).text()!="Clear history") {
+  queryRawgParams.search = $(e.target).text();
+  requestGame();
+}
+  
+})
+
+// Button click to get anticipated games
+$("#popular-games").on("click", function (e) {
+  //queries this game 
+  e.stopPropagation();
+  $("#title-input").text("");
+  
+  requestAnticipatedGames();
+
+})
+
 
 // get some data on load
 getStores()
