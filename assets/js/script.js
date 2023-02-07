@@ -128,26 +128,8 @@ function requestGame() {
 
     else {
 
-      for (i = 0; i < responseRAWG.results.length; i++) {
-
-        // add elements to HTML + add classes from CSS
-        let gameTitle = responseRAWG.results[i].name;
-        let gameID = responseRAWG.results[i].id;
-
-        // dynamically create a set of buttons for ul (buttons only + data attribute as ID for getting game details)
-        let buttonContainer;
-        buttonContainer = $("#games-list");
-
-        // Title
-        let buttonTitle = $("<button>");
-        $(buttonTitle).text(gameTitle);
-        // Adds data and classes
-        $(buttonTitle).attr({ "data-gameid": gameID, class: "btn  w-100 mb-1 p-2" });
-        //Adds new button to ul
-        $(buttonContainer).append(buttonTitle);
-
-      }
-
+      buildButtons(responseRAWG);
+   
     }
 
     // adds click functionality to buttons to call cheapshark (.off clears prevoius binding. If removed, evet will be triggered multiple times)
@@ -161,7 +143,7 @@ function requestGame() {
         url: queryCheapSharkURL + $.param(queryCheapSharkURLParams),
         method: "GET",
         error: function (xhr, status, error) {
-
+          alert("No deals error")
           $('#staticBackdrop').modal('show');
           $('#staticBackdropLabel').text(textDealsNotFound);
         }
@@ -170,48 +152,15 @@ function requestGame() {
 
         if (responseCheapShark.length === 0) {
           //Alert
+          alert("No deals length 0")
           $('#staticBackdrop').modal('show');
           $('#staticBackdropLabel').text(textDealsNotFound);
 
         }
         else {
 
-          for (i = 0; i < responseCheapShark.length; i++) {
-            //  console.log(responseCheapShark[i].title)
-            let gameRPrice = responseCheapShark[i].normalPrice;
-            let gameSPrice = responseCheapShark[i].salePrice;
-            let gameDealID = responseCheapShark[i].dealID;
-            let gamePlatformID = responseCheapShark[i].storeID;
-            let gamePlatformName;
-
-            // get store name from a previously received array
-            for (j = 0; j < storesArray.length; j++) {
-              if (gamePlatformID === storesArray[j].storeID) {
-                gamePlatformName = storesArray[j].storeName
-              }
-
-            }
-
-            //discount value as % from 100%
-            let gameDiscount = 100 - (Math.round(gameSPrice / gameRPrice * 100))
-
-            // new row
-            let markup = $("<tr>").append($("<td>").text(gamePlatformName))
-              .append($("<td>").text(gameRPrice))
-              .append($("<td>").text(gameSPrice))
-              .append($("<td>").text(gameDiscount))
-              .append($("<td>").append($("<a>", {
-                "href": dealURL + gameDealID,
-                "target": "_blank",
-                "class": "buyButton"
-              }).text("Buy")));
-
-            $(".deal-table tbody").append(markup);
-            // colours discounts
-            if (gameDiscount >= 50) {
-              $(".buyButton").css("background", "red");
-            }
-          }
+          buildTable(responseCheapShark)
+        
         }
 
       });
@@ -233,8 +182,8 @@ function requestGame() {
         }
       }).then(function (responseRawgDetails) {
 
-
-        // get elements
+        buildDetails(responseRawgDetails)
+       /*  // get elements
         let gameTitle = responseRawgDetails.name;
         let gameDescription = responseRawgDetails.description_raw;
         let gamebackgroundURL = responseRawgDetails.background_image;
@@ -244,7 +193,7 @@ function requestGame() {
         $(".game-description").text(gameDescription)
         $(".game-rating").text("Rating: " + gameRating)
         $("#game-output").find("img").attr({ src: gamebackgroundURL, alt: gameTitle });
-        //  console.log(responseRawgDetails)
+        //  console.log(responseRawgDetails) */
 
       });
 
@@ -335,9 +284,9 @@ $("#games-history").on("click", function (e) {
 // Button click to get anticipated games
 $("#popular-games").on("click", function (e) {
   //queries this game 
- // e.preventDefault()
- // e.stopPropagation();
+  e.stopPropagation();
   $("#title-input").text("");
+  
   requestAnticipatedGames();
 
 })
@@ -345,7 +294,9 @@ $("#popular-games").on("click", function (e) {
 // get most anticipated games for next year (10 games maxfor PC)
 
 function requestAnticipatedGames() {
-
+  // nullifies prevoius search results if exists
+  queryRawgParams.search = null;
+  // generates new year
   let nextYear = new Date().getFullYear() + 1;
   queryRAWGanticipatedURL = "https://api.rawg.io/api/games?platforms=4&page_size=10&page=1&dates=" + nextYear + "-01-01," + nextYear + "-12-31&ordering=-added&"
 
@@ -379,27 +330,9 @@ function requestAnticipatedGames() {
     }
 
     else {
-
-      for (i = 0; i < responseRAWG.results.length; i++) {
-
-        // add elements to HTML + add classes from CSS
-        let gameTitle = responseRAWG.results[i].name;
-        let gameID = responseRAWG.results[i].id;
-
-        // dynamically create a set of buttons for ul (buttons only + data attribute as ID for getting game details)
-        let buttonContainer;
-        buttonContainer = $("#games-list");
-
-        // Title
-        let buttonTitle = $("<button>");
-        $(buttonTitle).text(gameTitle);
-        // Adds data and classes
-        $(buttonTitle).attr({ "data-gameid": gameID, class: "btn w-100 mb-1 p-2" });
-        //Adds new button to ul
-        $(buttonContainer).append(buttonTitle);
-
-      }
-
+     
+      buildButtons(responseRAWG);
+    
     }
 
     // adds click functionality to buttons to call cheapshark 
@@ -423,50 +356,12 @@ function requestAnticipatedGames() {
 
         }
         else {
+          
+          buildTable(responseCheapShark)
 
-          for (i = 0; i < responseCheapShark.length; i++) {
-            //  console.log(responseCheapShark[i].title)
-            let gameRPrice = responseCheapShark[i].normalPrice;
-            let gameSPrice = responseCheapShark[i].salePrice;
-            let gameDealID = responseCheapShark[i].dealID;
-            let gamePlatformID = responseCheapShark[i].storeID;
-            let gamePlatformName;
-
-            // get store name from a previously received array
-            for (j = 0; j < storesArray.length; j++) {
-              if (gamePlatformID === storesArray[j].storeID) {
-                gamePlatformName = storesArray[j].storeName
-              }
-
-            }
-
-            //discount value as % from 100%
-            let gameDiscount = 100 - (Math.round(gameSPrice / gameRPrice * 100))
-
-            // new row
-            let markup = $("<tr>").append($("<td>").text(gamePlatformName))
-              .append($("<td>").text(gameRPrice))
-              .append($("<td>").text(gameSPrice))
-              .append($("<td>").text(gameDiscount))
-              .append($("<td>").append($("<a>", {
-                "href": dealURL + gameDealID,
-                "target": "_blank",
-                "class": "buyButton"
-              }).text("Buy")));
-
-            $(".deal-table tbody").append(markup);
-
-            if (gameDiscount >= 50) {
-              $(".buyButton").css("background", "red");
-            }
-
-
-          }
         }
 
       });
-
-
       // second call to get game details using RAWG single game details
 
       // need a game ID
@@ -474,22 +369,12 @@ function requestAnticipatedGames() {
       queryRawgDetails = "https://api.rawg.io/api/games/" + gameID + "?"
 
        $.ajax({
-        url: queryRawgDetails + $.param(queryRawgDetailsParams),
+        url: queryRawgDetails + $.param(queryRawgParams),
         method: "GET"
       }).then(function (responseRawgDetails) {
 
-        // get elements
-        let gameTitle = responseRawgDetails.name;
-        let gameDescription = responseRawgDetails.description_raw;
-        let gamebackgroundURL = responseRawgDetails.background_image;
-        let gameRating = responseRawgDetails.rating;
-        // display elements
-        $(".game-title").text(gameTitle)
-        $(".game-description").text(gameDescription)
-        $(".game-rating").text("Rating: " + gameRating)
-        $("#game-output").find("img").attr({ src: gamebackgroundURL, alt: gameTitle });
-        //  console.log(responseRawgDetails)
-
+        buildDetails(responseRawgDetails)
+       
       }); 
 
     })
@@ -499,9 +384,98 @@ function requestAnticipatedGames() {
 }
 
 
+
+
+// generate a list of buttons for each game
+function buildButtons(dataReceived){
+
+  for (i = 0; i < dataReceived.results.length; i++) {
+
+    // add elements to HTML + add classes from CSS
+    let gameTitle = dataReceived.results[i].name;
+    let gameID = dataReceived.results[i].id;
+
+    // dynamically create a set of buttons for ul (buttons only + data attribute as ID for getting game details)
+    let buttonContainer;
+    buttonContainer = $("#games-list");
+
+    // Title
+    let buttonTitle = $("<button>");
+    $(buttonTitle).text(gameTitle);
+    // Adds data and classes
+    $(buttonTitle).attr({ "data-gameid": gameID, class: "btn w-100 mb-1 p-2" });
+    //Adds new button to ul
+    $(buttonContainer).append(buttonTitle);
+}
+}
+
+// generate a table of deals
+function buildTable(dataReceived) {
+
+
+  for (i = 0; i < dataReceived.length; i++) {
+    //  console.log(responseCheapShark[i].title)
+    let gameRPrice = dataReceived[i].normalPrice;
+    let gameSPrice = dataReceived[i].salePrice;
+    let gameDealID = dataReceived[i].dealID;
+    let gamePlatformID = dataReceived[i].storeID;
+    let gamePlatformName;
+
+    // get store name from a previously received array
+    for (j = 0; j < storesArray.length; j++) {
+      if (gamePlatformID === storesArray[j].storeID) {
+        gamePlatformName = storesArray[j].storeName
+      }
+
+    }
+
+    //discount value as % from 100%
+    let gameDiscount = 100 - (Math.round(gameSPrice / gameRPrice * 100))
+
+    // new row
+    let markup = $("<tr>").append($("<td>").text(gamePlatformName))
+      .append($("<td>").text(gameRPrice))
+      .append($("<td>").text(gameSPrice))
+      .append($("<td>").text(gameDiscount))
+      .append($("<td>").append($("<a>", {
+        "href": dealURL + gameDealID,
+        "target": "_blank",
+        "class": "buyButton"
+      }).text("Buy")));
+
+    $(".deal-table tbody").append(markup);
+
+    if (gameDiscount >= 50) {
+      $(".buyButton").css("background", "red");
+    }
+
+  }
+
+}
+
+// generate game details
+function buildDetails(dataReceived) {
+
+ // get elements
+ let gameTitle = dataReceived.name;
+ let gameDescription = dataReceived.description_raw;
+ let gamebackgroundURL = dataReceived.background_image;
+ let gameRating = dataReceived.rating;
+ // display elements
+ $(".game-title").text(gameTitle)
+ $(".game-description").text(gameDescription)
+ $(".game-rating").text("Rating: " + gameRating)
+ $("#game-output").find("img").attr({ src: gamebackgroundURL, alt: gameTitle });
+
+
+}
+
+
 // get some data on load
 getStores()
 renderButtons()
+
+
 
 
 
