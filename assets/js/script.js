@@ -247,7 +247,7 @@ function requestAnticipatedGames() {
     }
 
     // adds click functionality to buttons to call cheapshark 
-    $("#games-list").on("click", function (e) {
+    $("#games-list").off("click").on("click", function (e) {
       // clear table rows
       $("#deals-table").empty();
       // get game name for Cheap Shark
@@ -386,8 +386,8 @@ function buildModal(text) {
 
 // get a list of games based on user input
 $("#search-button").on('click', function (e) {
-  e.preventDefault();
-
+ // e.preventDefault();
+  e.stopPropagation();
   // get user input
   queryRawgParams.search = $("#title-input").val()
 
