@@ -209,8 +209,8 @@ function requestAnticipatedGames() {
   // nullifies prevoius search results if exists
   queryRawgParams.search = null;
   // generates new year
-  let nextYear = new Date().getFullYear() + 1;
-  queryRAWGanticipatedURL = "https://api.rawg.io/api/games?platforms=4&page_size=10&page=1&dates=" + nextYear + "-01-01," + nextYear + "-12-31&ordering=-added&"
+  let thisYear = new Date().getFullYear();
+  queryRAWGanticipatedURL = "https://api.rawg.io/api/games?platforms=4&page_size=10&page=1&dates=" + thisYear + "-01-01," + thisYear + "-12-31&ordering=-added&"
 
   // clear previous records
   $("#games-list").empty();
