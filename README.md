@@ -6,13 +6,13 @@ Find the best deals for your favorite games
 
 This application lets you search for your favorite games and find the best deals from different stores.
 
-Simply search for the game title you're interested in, and our app will provide you with the game information including description and rating, and the lowest prices available online.
+Simply search for the game title you're interested in and our app will provide you with the game information including description, rating and the lowest prices available online.
 
 You can also search the most anticipated games for next year.
 
 ## Screenshots
 
-[Main Page](assets/screenshots/game_dealer_main_page.png)
+![Main Page](assets/screenshots/game_dealer_main_page.png)
 
 ## Links
 
