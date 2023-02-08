@@ -6,7 +6,9 @@
 body {
   font-family: "DM Sans", sans-serif;
   color: #fff;
+  background-color: #0c0d14;
   background-image: url("../img/BG.png");
+  background-size: cover;
   background-repeat: no-repeat;
 }
 
@@ -29,10 +31,6 @@ body {
     rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
-/* .header-title {
-  margin: 60px 20px 30px;
-} */
-
 .title {
   font-family: "VT323", monospace;
   color: rgb(247, 247, 247);
@@ -54,7 +52,6 @@ body {
   min-height: 70vh;
   background-color: var(--left-input-card);
   color: #fff;
-  /* box-shadow: 5px 5px 5px 5px red; */
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
     rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
     rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
@@ -149,4 +146,46 @@ body {
 #deals-table tr:nth-child(odd) {
   background-color: #0000004b;
   color: white;
+}
+
+/* MEDIA QUERIES */
+
+@media (max-width: 600px) {
+  body {
+    background-color: #0c0d14;
+  }
+
+  .card-output-section {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  body {
+    background-color: #0c0d14;
+  }
+
+  .card-output-section {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (max-width: 1920px) {
+  body {
+    background-color: #0c0d14;
+    background-image: url("../img/BG.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+}
+
+@media screen and (min-width: 3840px) {
+  body {
+    background-color: #0c0d14;
+    background-image: url("../img/BGx2.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
 }
