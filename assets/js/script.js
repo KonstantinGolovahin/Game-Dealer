@@ -1,4 +1,4 @@
-let keyRAWG="4d3c85eb44b84a48a052214685745b50";
+let keyRAWG = "4d3c85eb44b84a48a052214685745b50";
 
 // game name to be used for CheapShark API
 let resultGame = ""
@@ -12,6 +12,7 @@ queryRawgParams.search
 let gameID;
 let queryRawgDetails;
 
+//CheapShark API
 let queryCheapSharkURL = "https://www.cheapshark.com/api/1.0/deals?limit=10&exact=1&sortBy=Price&"
 let queryCheapSharkURLParams = { "title": resultGame }
 
@@ -32,6 +33,9 @@ let textRawgFails = "Unable to contact RAWG API. Game search is not avialable."
 // new array for values from a local storage
 let taskSaved = [];
 taskSaved = getTasks(taskSaved);
+
+
+///////////////////// Functions //////////////
 
 // retrieve saved values from local storage if any exists
 function getTasks(arr) {
@@ -76,7 +80,6 @@ function renderButtons() {
 
 }
 
-
 // search in RAWG database
 function requestGame() {
 
@@ -88,13 +91,13 @@ function requestGame() {
     url: queryRawgURL + $.param(queryRawgParams),
     method: "GET",
     error: function (xhr, status, error) {
-  
+
       buildModal(textRawgFails)
-           
+
     }
   }).then(function (responseRAWG) {
 
-      // reduce amount of records to display
+    // reduce amount of records to display
     let maxResponseLength = 0
     if (responseRAWG.results.length > 10) {
       maxResponseLength = 10
@@ -109,13 +112,13 @@ function requestGame() {
     if (responseRAWG.results.length === 0) {
       //Alert
       buildModal(textGameNotFound)
-     
+
     }
 
     else {
 
       buildButtons(responseRAWG);
-   
+
     }
 
     // adds click functionality to buttons to call cheapshark (.off clears prevoius binding. If removed, evet will be triggered multiple times)
@@ -129,21 +132,21 @@ function requestGame() {
         url: queryCheapSharkURL + $.param(queryCheapSharkURLParams),
         method: "GET",
         error: function (xhr, status, error) {
-         
+
           buildModal(textDealsNotFound)
-         
+
         }
       }).then(function (responseCheapShark) {
-     
+
         if (responseCheapShark.length === 0) {
           //Alert
           buildModal(textDealsNotFound)
-        
+
         }
         else {
 
           buildTable(responseCheapShark)
-        
+
         }
 
       });
@@ -158,14 +161,14 @@ function requestGame() {
         url: queryRawgDetails + $.param(queryRawgParams),
         method: "GET",
         error: function (xhr, status, error) {
-         
+
           buildModal(textRawgFails)
-         
+
         }
       }).then(function (responseRawgDetails) {
 
         buildDetails(responseRawgDetails)
-       
+
       });
 
     })
@@ -174,16 +177,15 @@ function requestGame() {
 
 }
 
-
 // get a list of stores before searching for games
 function getStores() {
   $.ajax({
     url: storeListURL,
     method: "GET",
     error: function (xhr, status, error) {
-     
+
       buildModal(textCheapSharkFails)
-      
+
     }
   }).then(function (responseStores) {
 
@@ -201,7 +203,6 @@ function getStores() {
 
   });
 }
-
 
 // get most anticipated games for next year (10 games maxfor PC)
 
@@ -221,7 +222,7 @@ function requestAnticipatedGames() {
     method: "GET"
   }).then(function (responseRAWG) {
 
-      // reduce amount of records to display
+    // reduce amount of records to display
     let maxResponseLength = 0
     if (responseRAWG.results.length > 10) {
       maxResponseLength = 10
@@ -236,13 +237,13 @@ function requestAnticipatedGames() {
     if (responseRAWG.results.length === 0) {
       //Alert
       buildModal(textGameNotFound)
-  
+
     }
 
     else {
-     
+
       buildButtons(responseRAWG);
-    
+
     }
 
     // adds click functionality to buttons to call cheapshark 
@@ -257,13 +258,13 @@ function requestAnticipatedGames() {
         method: "GET"
       }).then(function (responseCheapShark) {
 
-          if (responseCheapShark.length === 0) {
+        if (responseCheapShark.length === 0) {
           //Alert
           buildModal(textDealsNotFound)
-        
+
         }
         else {
-          
+
           buildTable(responseCheapShark)
 
         }
@@ -275,14 +276,14 @@ function requestAnticipatedGames() {
       gameID = $(e.target).attr('data-gameid');
       queryRawgDetails = "https://api.rawg.io/api/games/" + gameID + "?"
 
-       $.ajax({
+      $.ajax({
         url: queryRawgDetails + $.param(queryRawgParams),
         method: "GET"
       }).then(function (responseRawgDetails) {
 
         buildDetails(responseRawgDetails)
-       
-      }); 
+
+      });
 
     })
 
@@ -290,9 +291,8 @@ function requestAnticipatedGames() {
 
 }
 
-
 // generate a list of buttons for each game
-function buildButtons(dataReceived){
+function buildButtons(dataReceived) {
 
   for (i = 0; i < dataReceived.results.length; i++) {
 
@@ -311,12 +311,11 @@ function buildButtons(dataReceived){
     $(buttonTitle).attr({ "data-gameid": gameID, class: "btn w-100 mb-1 p-2" });
     //Adds new button to ul
     $(buttonContainer).append(buttonTitle);
-}
+  }
 }
 
 // generate a table of deals
 function buildTable(dataReceived) {
-
 
   for (i = 0; i < dataReceived.length; i++) {
     //  console.log(responseCheapShark[i].title)
@@ -361,27 +360,26 @@ function buildTable(dataReceived) {
 // generate game details
 function buildDetails(dataReceived) {
 
- // get elements
- let gameTitle = dataReceived.name;
- let gameDescription = dataReceived.description_raw;
- let gamebackgroundURL = dataReceived.background_image;
- let gameRating = dataReceived.rating;
- // display elements
- $(".game-title").text(gameTitle)
- $(".game-description").text(gameDescription)
- $(".game-rating").text("Rating: " + gameRating)
- $("#game-output").find("img").attr({ src: gamebackgroundURL, alt: gameTitle });
-
+  // get elements
+  let gameTitle = dataReceived.name;
+  let gameDescription = dataReceived.description_raw;
+  let gamebackgroundURL = dataReceived.background_image;
+  let gameRating = dataReceived.rating;
+  // display elements
+  $(".game-title").text(gameTitle)
+  $(".game-description").text(gameDescription)
+  $(".game-rating").text("Rating: " + gameRating)
+  $("#game-output").find("img").attr({ src: gamebackgroundURL, alt: gameTitle });
 
 }
 
 // display modal with a message
 function buildModal(text) {
 
-   //Alert
-   $("#modalText").text(text);
-   $("#staticBackdrop").modal("show");
-   
+  //Alert
+  $("#modalText").text(text);
+  $("#staticBackdrop").modal("show");
+
 }
 
 ///////////////////// Buttons //////////////
@@ -396,7 +394,7 @@ $("#search-button").on('click', function (e) {
   if (queryRawgParams.search === "") {
     //Alert
     buildModal(textEmptyInput)
-   
+
   }
 
   else {
@@ -417,7 +415,6 @@ $("#search-button").on('click', function (e) {
     taskSaved = taskObject;
     renderButtons()
     requestGame()
-
   }
 
 });
@@ -430,23 +427,22 @@ $("#games-history").on("click", function (e) {
   $("#title-input").text("");
 
   // prevent API call if user deletes history
-if($(e.target).text()!="Clear history") {
-  queryRawgParams.search = $(e.target).text();
-  requestGame();
-}
-  
+  if ($(e.target).text() != "Clear history") {
+    queryRawgParams.search = $(e.target).text();
+    requestGame();
+  }
+
 })
 
 // Button click to get anticipated games
 $("#popular-games").on("click", function (e) {
   //queries this game 
+  e.preventDefault();
   e.stopPropagation();
   $("#title-input").text("");
-  
   requestAnticipatedGames();
 
 })
-
 
 // get some data on load
 getStores()
