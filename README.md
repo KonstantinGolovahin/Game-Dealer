@@ -13,8 +13,8 @@ The layout is fully responsive for different size devices.
 
 ## Screenshots
 
-![Main Page](assets/screenshots/game_dealer_main_page.png)
-![game search](assets/screenshots/game-search-output.png)
+![Game Details](assets/img/Screenshot_Game_Detailsr.png)
+![Popular Games](assets/img/Screenshot_Popular_Games.png)
 
 ## Links
 
